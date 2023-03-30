@@ -1,0 +1,32 @@
+class Solution {
+public:
+    bool isPalindrome(int x) {
+        if(x < 0) {
+            return false;
+        } else {
+            int temp = x;
+            int counter = 0;
+            while(temp > 0) {
+                temp = temp / 10;
+                counter += 1;
+                // finding size
+            }
+            int* arr = new int[counter]; // create new array
+            int size = counter - 1;
+            temp = x;
+            while(temp > 0) {
+                arr[size] = temp % 10;
+                size--;
+                temp = temp / 10;
+            }
+            for(int i = 0 ; i < counter ; i++) {
+                if(arr[i] != arr[counter - 1 - i]) {
+                    delete[] arr;
+                    return false;
+                }
+            }
+            delete[] arr;
+            return true;
+        }
+    }
+};
