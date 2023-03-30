@@ -1,0 +1,48 @@
+string fractionToDecimal(int numerator, int denominator) {
+    // Handle the case when the numerator is 0
+    if (numerator == 0) {
+        return "0";
+    }
+    
+    string result = "";
+    
+    // Handle the sign of the result
+    if ((numerator > 0) ^ (denominator > 0)) {
+        result += "-";
+    }
+    
+    // Convert to long long to avoid overflow
+    long long num = abs((long long) numerator);
+    long long den = abs((long long) denominator);
+    
+    // Add the integer part to the result
+    result += to_string(num / den);
+    
+    // If the result is an integer, return it
+    if (num % den == 0) {
+        return result;
+    }
+    
+    result += ".";
+    
+    // Use a map to store the remainder and its index
+    unordered_map<long long, int> remainders;
+    long long remainder = num % den;
+    while (remainder != 0 && remainders.find(remainder) == remainders.end()) {
+        remainders[remainder] = result.size();
+        remainder *= 10;
+        result += to_string(remainder / den);
+        remainder %= den;
+    }
+    
+    // If the remainder is 0, return the result
+    if (remainder == 0) {
+        return result;
+    }
+    
+    // Insert the parentheses around the repeating part
+    result.insert(remainders[remainder], "(");
+    result += ")";
+    
+    return result;
+}
