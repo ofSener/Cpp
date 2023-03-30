@@ -1,0 +1,30 @@
+class Solution {
+public:
+    int maxPoints(vector<vector<int>>& points) {
+        int n = points.size();
+        if (n <= 2) return n; // If there are at most 2 points, they all lie on the same line.
+        
+        int max_count = 0;
+        for (int i = 0; i < n; i++) {
+            unordered_map<double, int> slope_counts; // Map from slope to count of points with that slope.
+            int same_point_count = 1; // Count of points with the same coordinates as points[i].
+            for (int j = 0; j < n; j++) {
+                if (i == j) continue;
+                int x1 = points[i][0], y1 = points[i][1];
+                int x2 = points[j][0], y2 = points[j][1];
+                if (x1 == x2 && y1 == y2) { // Same point.
+                    same_point_count++;
+                } else { // Compute the slope and update the map.
+                    double slope = (y1 - y2) * 1.0 / (x1 - x2); // We use 1.0 to force floating-point division.
+                    slope_counts[slope]++;
+                }
+            }
+            int local_max_count = same_point_count; // Initialize with the count of points with the same coordinates.
+            for (auto& it : slope_counts) { // Iterate over the map and update the local maximum count.
+                local_max_count = max(local_max_count, it.second + same_point_count);
+            }
+            max_count = max(max_count, local_max_count); // Update the global maximum count.
+        }
+        return max_count;
+    }
+};
